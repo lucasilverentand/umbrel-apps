@@ -1,9 +1,10 @@
 manifestVersion: 1
-id: example-app
-category: files
+id: example-store-example-app
+category: Development
 name: Example App
 version: "0.1.0"
 tagline: Replace this with a short user-facing summary
+icon: https://raw.githubusercontent.com/example/example-app-store/main/example-store-example-app/icon.svg
 description: >-
   Replace this with a concise description of what the app does and what users
   can expect after installing it.

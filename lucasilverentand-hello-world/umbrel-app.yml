@@ -1,9 +1,10 @@
 manifestVersion: 1
-id: hello-world
-category: developer
+id: lucasilverentand-hello-world
+category: Development
 name: Hello World
 version: "0.1.0"
 tagline: Verify this custom Umbrel app store is connected
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-hello-world/icon.svg
 description: >-
   Hello World is a tiny test app for this custom Umbrel app store. It serves a
   static page through umbrelOS so you can confirm that the store, app metadata,
@@ -20,4 +21,4 @@ path: ""
 deterministicPassword: false
 torOnly: false
 submitter: Luca Silverentand
-submission: ""
+submission: https://github.com/lucasilverentand/umbrel-apps

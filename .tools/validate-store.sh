@@ -6,6 +6,8 @@ failed=0
 apps=0
 ports_seen="
 "
+store_metadata="$root/umbrel-app-store.yml"
+store_id=""
 
 fail() {
   printf 'error: %s\n' "$1" >&2
@@ -22,12 +24,24 @@ check_file_contains() {
   fi
 }
 
+if [ ! -f "$store_metadata" ]; then
+  fail "root umbrel-app-store.yml is missing"
+else
+  check_file_contains "$store_metadata" '^id:[[:space:]]*[a-z0-9][a-z0-9-]*[[:space:]]*$' 'store id'
+  check_file_contains "$store_metadata" '^name:[[:space:]]*.+' 'store name'
+  store_id="$(awk -F: '/^id:/ { gsub(/[[:space:]'\'']/, "", $2); print $2; exit }' "$store_metadata")"
+fi
+
 for app_dir in "$root"/*; do
   [ -d "$app_dir" ] || continue
 
   app_name="$(basename "$app_dir")"
   case "$app_name" in
     .* ) continue ;;
+  esac
+
+  case "$app_name" in
+    umbrel-app-store.yml|README.md|AGENTS.md) continue ;;
   esac
 
   apps=$((apps + 1))
@@ -40,10 +54,17 @@ for app_dir in "$root"/*; do
   if [ -f "$metadata" ]; then
     check_file_contains "$metadata" '^manifestVersion:[[:space:]]*1[[:space:]]*$' 'manifestVersion: 1'
     check_file_contains "$metadata" "^id:[[:space:]]*\"?$app_name\"?[[:space:]]*$" "id matching directory name ($app_name)"
+    if [ -n "$store_id" ]; then
+      case "$app_name" in
+        "$store_id"*) ;;
+        *) fail "$metadata id must start with app store id '$store_id'" ;;
+      esac
+    fi
     check_file_contains "$metadata" '^name:[[:space:]]*.+' 'name'
     check_file_contains "$metadata" '^version:[[:space:]]*.+' 'version'
     check_file_contains "$metadata" '^tagline:[[:space:]]*.+' 'tagline'
     check_file_contains "$metadata" '^port:[[:space:]]*[0-9]+[[:space:]]*$' 'numeric port'
+    check_file_contains "$metadata" '^icon:[[:space:]]*.+' 'icon for community app store'
 
     port="$(awk -F: '/^port:[[:space:]]*[0-9]+[[:space:]]*$/ { gsub(/[[:space:]]/, "", $2); print $2; exit }' "$metadata")"
     if [ -n "$port" ]; then

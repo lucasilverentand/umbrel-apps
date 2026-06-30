@@ -1,6 +1,6 @@
 # Umbrel App Store Maintenance Guide
 
-This repository is a custom Umbrel app store. umbrelOS treats each non-hidden top-level directory as an installable app package. Hidden directories such as `.tools/`, `.templates/`, and `.github/` are repository support files and must not be treated as apps.
+This repository is a custom Umbrel app store. umbrelOS reads root `umbrel-app-store.yml` for community-store metadata and treats each non-hidden top-level directory as an installable app package. Hidden directories such as `.tools/`, `.templates/`, and `.github/` are repository support files and must not be treated as apps.
 
 Keep work scoped to the requested app or store-maintenance task. If you find useful follow-up work outside the current objective, file it separately instead of expanding the current change.
 
@@ -17,7 +17,7 @@ Keep work scoped to the requested app or store-maintenance task. If you find use
 Each app package lives in a top-level directory named exactly like the app id:
 
 ```text
-app-id/
+lucasilverentand-app-id/
   umbrel-app.yml
   docker-compose.yml
   data/
@@ -40,7 +40,7 @@ Use `.templates/example-app/` when creating a new package, then replace every pl
 Keep `umbrel-app.yml` complete and user-facing:
 
 - `manifestVersion` should be `1`.
-- `id` should be lowercase kebab-case and match the directory name.
+- `id` should be lowercase kebab-case, match the directory name, and start with the store id from `umbrel-app-store.yml`. Umbrel filters community apps whose ids do not start with the store id.
 - `category` should use a category already used by Umbrel when possible.
 - `name`, `tagline`, and `description` should explain what the user gets after install.
 - `version` should match the packaged upstream app version when packaging real software.
@@ -48,6 +48,7 @@ Keep `umbrel-app.yml` complete and user-facing:
 - `developer`, `website`, `repo`, and `support` should point to the real upstream project for packaged third-party apps.
 - `port` is the host-facing Umbrel app URL port assigned to `app_proxy`. It is not usually the same as the app container's internal listen port.
 - `gallery` entries must exist under the app package, usually in `data/`, if screenshots are listed.
+- `icon` should be set for community-store apps because Umbrel only auto-generates official-store icon URLs.
 
 Do not add marketing copy that hides setup requirements. If an app needs credentials, first-run configuration, external devices, or a manual setup step, make that clear in the description or release notes.
 
