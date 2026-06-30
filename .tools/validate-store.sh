@@ -4,6 +4,8 @@ set -eu
 root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 failed=0
 apps=0
+ports_seen="
+"
 
 fail() {
   printf 'error: %s\n' "$1" >&2
@@ -42,6 +44,20 @@ for app_dir in "$root"/*; do
     check_file_contains "$metadata" '^version:[[:space:]]*.+' 'version'
     check_file_contains "$metadata" '^tagline:[[:space:]]*.+' 'tagline'
     check_file_contains "$metadata" '^port:[[:space:]]*[0-9]+[[:space:]]*$' 'numeric port'
+
+    port="$(awk -F: '/^port:[[:space:]]*[0-9]+[[:space:]]*$/ { gsub(/[[:space:]]/, "", $2); print $2; exit }' "$metadata")"
+    if [ -n "$port" ]; then
+      case "$port" in
+        80|443|2000) fail "$metadata uses reserved Umbrel/public port $port" ;;
+      esac
+
+      if printf '%s' "$ports_seen" | grep -qx "$port"; then
+        fail "$metadata uses duplicate manifest port $port"
+      fi
+
+      ports_seen="${ports_seen}${port}
+"
+    fi
   fi
 
   if [ -f "$compose" ]; then
@@ -49,6 +65,12 @@ for app_dir in "$root"/*; do
     check_file_contains "$compose" '^[[:space:]]+app_proxy:[[:space:]]*$' 'app_proxy service'
     check_file_contains "$compose" 'APP_HOST:' 'APP_HOST'
     check_file_contains "$compose" 'APP_PORT:' 'APP_PORT'
+
+    if grep -Eq '^[[:space:]]+image:' "$compose" &&
+      grep -Ev '^[[:space:]]+image:[[:space:]]+[^[:space:]#]+:[^[:space:]#]+@sha256:[0-9a-f]{64}([[:space:]]*(#.*)?)?$' "$compose" |
+      grep -Eq '^[[:space:]]+image:'; then
+      fail "$compose has image references that are not pinned as tag@sha256:digest"
+    fi
   fi
 done
 
@@ -59,4 +81,3 @@ elif [ "$failed" -eq 0 ]; then
 fi
 
 exit "$failed"
-

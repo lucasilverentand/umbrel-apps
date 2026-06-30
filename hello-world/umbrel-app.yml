@@ -8,18 +8,16 @@ description: >-
   Hello World is a tiny test app for this custom Umbrel app store. It serves a
   static page through umbrelOS so you can confirm that the store, app metadata,
   proxy wiring, and install flow are working.
-releaseNotes: >-
-  Initial test package.
+releaseNotes: ""
 developer: Luca Silverentand
 website: https://github.com/lucasilverentand/umbrel-apps
 dependencies: []
 repo: https://github.com/lucasilverentand/umbrel-apps
 support: https://github.com/lucasilverentand/umbrel-apps/issues
-port: 8080
+port: 29999
 gallery: []
 path: ""
 deterministicPassword: false
 torOnly: false
 submitter: Luca Silverentand
 submission: ""
-

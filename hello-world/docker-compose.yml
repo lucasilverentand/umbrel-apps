@@ -4,10 +4,10 @@ services:
   app_proxy:
     environment:
       APP_HOST: hello-world_server_1
-      APP_PORT: 8080
+      APP_PORT: 80
 
   server:
-    image: nginx:1.27-alpine
+    image: nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
     restart: on-failure
     command:
       - /bin/sh
@@ -63,4 +63,3 @@ services:
         </html>
         HTML
         nginx -g 'daemon off;'
-

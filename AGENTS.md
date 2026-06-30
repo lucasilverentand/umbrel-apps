@@ -46,7 +46,7 @@ Keep `umbrel-app.yml` complete and user-facing:
 - `version` should match the packaged upstream app version when packaging real software.
 - `releaseNotes` should describe the package update or upstream release in practical terms.
 - `developer`, `website`, `repo`, and `support` should point to the real upstream project for packaged third-party apps.
-- `port` must match the app service port exposed through `app_proxy`.
+- `port` is the host-facing Umbrel app URL port assigned to `app_proxy`. It is not usually the same as the app container's internal listen port.
 - `gallery` entries must exist under the app package, usually in `data/`, if screenshots are listed.
 
 Do not add marketing copy that hides setup requirements. If an app needs credentials, first-run configuration, external devices, or a manual setup step, make that clear in the description or release notes.
@@ -66,6 +66,7 @@ services:
 Guidelines:
 
 - Route the browser UI through `app_proxy`.
+- Set manifest `port` to a unique host-facing port for this store. Set `APP_PORT` to the internal port the web service actually listens on.
 - Persist user data under `${APP_DATA_DIR}`.
 - Use `${UMBREL_ROOT}` only when the app intentionally needs shared Umbrel storage.
 - Prefer pinned image tags and image digests for real app packages.
@@ -91,6 +92,7 @@ For app changes, also inspect the package manually:
 - Confirm every gallery asset exists.
 - Confirm `APP_HOST` matches the Compose service name in Umbrel's generated container naming style.
 - Confirm `APP_PORT` matches the internal service port.
+- Confirm manifest `port` is unique in this store and does not collide with Umbrel public ports such as `80`, `443`, or `2000`.
 - Confirm persistent paths use `${APP_DATA_DIR}`.
 
 When possible, install the app on umbrelOS and verify that it opens to a useful browser page, setup flow, login page, or status page without requiring SSH or log scraping.
@@ -147,4 +149,3 @@ If GitHub authentication fails, stop and report the exact auth failure. Do not w
 ## Follow-Up Work
 
 If this repository is published on GitHub and you find useful follow-up work outside the current objective, create a GitHub issue for it. State that Codex created the issue and explain why it was filed. Do not include private or sensitive details unless explicitly approved.
-
