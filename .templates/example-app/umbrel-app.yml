@@ -1,0 +1,24 @@
+manifestVersion: 1
+id: example-app
+category: files
+name: Example App
+version: "0.1.0"
+tagline: Replace this with a short user-facing summary
+description: >-
+  Replace this with a concise description of what the app does and what users
+  can expect after installing it.
+releaseNotes: >-
+  Initial package.
+developer: Example Developer
+website: https://example.com
+dependencies: []
+repo: https://github.com/example/example-app
+support: https://github.com/example/example-app/issues
+port: 8080
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Your Name
+submission: ""
+
