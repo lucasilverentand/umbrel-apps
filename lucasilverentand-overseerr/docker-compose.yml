@@ -12,7 +12,6 @@ services:
     environment:
       TZ: ${TZ:-Etc/UTC}
       PORT: "5055"
-      JELLYFIN_URL: http://lucasilverentand-jellyfin_server_1:8096
       SONARR_URL: http://lucasilverentand-sonarr_server_1:8989
       SONARR_4K_URL: http://lucasilverentand-sonarr-4k_server_1:8989
       RADARR_URL: http://lucasilverentand-radarr_server_1:7878
