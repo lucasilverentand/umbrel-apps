@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-radarr_server_1
+      APP_PORT: 7878
+
+  server:
+    image: lscr.io/linuxserver/radarr:latest@sha256:39da107b5a9371fdaa651bd188049b863716a815385eb3a30d41071b7e1aeb33
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      RADARR_CATEGORY: movies
+      RADARR_ROOT_FOLDER: /data/movies
+      PROWLARR_URL: http://lucasilverentand-prowlarr_server_1:9696
+      QBITTORRENT_URL: http://lucasilverentand-qbittorrent_server_1:8080
+      SABNZBD_URL: http://lucasilverentand-sabnzbd_server_1:8085
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/data

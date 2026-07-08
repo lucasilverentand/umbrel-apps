@@ -1,0 +1,27 @@
+manifestVersion: 1
+id: lucasilverentand-sonarr
+category: Media
+name: Sonarr
+version: "latest"
+tagline: HD TV series manager
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sonarr/icon.svg
+description: >-
+  Sonarr manages HD TV series and imports completed downloads from qBittorrent
+  or SABnzbd. Use the tv category and the /data/series root folder for the
+  standard library.
+releaseNotes: Initial Umbrel package for the HD TV side of the media stack.
+developer: Sonarr
+website: https://sonarr.tv
+dependencies:
+  - lucasilverentand-prowlarr
+  - lucasilverentand-qbittorrent
+  - lucasilverentand-sabnzbd
+repo: https://github.com/Sonarr/Sonarr
+support: https://github.com/Sonarr/Sonarr/issues
+port: 29985
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

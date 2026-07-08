@@ -1,0 +1,29 @@
+manifestVersion: 1
+id: lucasilverentand-overseerr
+category: Media
+name: Overseerr
+version: "latest"
+tagline: Media request management for Jellyfin and Arr
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-overseerr/icon.svg
+description: >-
+  Overseerr provides request management for the media stack. Register standard
+  Sonarr and Radarr as the default servers and register Sonarr 4K and Radarr 4K
+  as 4K servers so users can request HD and 4K separately.
+releaseNotes: Initial Umbrel package wired to the HD/4K Arr and Jellyfin stack.
+developer: Overseerr
+website: https://overseerr.dev
+dependencies:
+  - lucasilverentand-jellyfin
+  - lucasilverentand-sonarr
+  - lucasilverentand-sonarr-4k
+  - lucasilverentand-radarr
+  - lucasilverentand-radarr-4k
+repo: https://github.com/sct/overseerr
+support: https://github.com/sct/overseerr/issues
+port: 29990
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

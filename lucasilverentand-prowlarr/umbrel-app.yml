@@ -1,0 +1,26 @@
+manifestVersion: 1
+id: lucasilverentand-prowlarr
+category: Media
+name: Prowlarr
+version: "latest"
+tagline: Indexer manager for the Arr stack
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-prowlarr/icon.svg
+description: >-
+  Prowlarr manages indexers for Sonarr, Sonarr 4K, Radarr, Radarr 4K, and Lidarr.
+  Configure its proxy settings to use the Privado VPN SOCKS endpoint and add
+  FlareSolverr for indexers that need browser challenge solving.
+releaseNotes: Initial Umbrel package with Privado VPN and FlareSolverr dependencies.
+developer: Prowlarr
+website: https://prowlarr.com
+dependencies:
+  - lucasilverentand-privado-vpn
+  - lucasilverentand-flaresolverr
+repo: https://github.com/Prowlarr/Prowlarr
+support: https://github.com/Prowlarr/Prowlarr/issues
+port: 29982
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

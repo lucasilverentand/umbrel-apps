@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-flaresolverr_server_1
+      APP_PORT: 8191
+
+  server:
+    image: ghcr.io/flaresolverr/flaresolverr:latest@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
+    restart: on-failure
+    environment:
+      TZ: ${TZ:-Etc/UTC}
+      LOG_LEVEL: info
+      PROMETHEUS_ENABLED: "false"

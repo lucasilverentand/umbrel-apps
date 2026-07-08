@@ -1,0 +1,27 @@
+manifestVersion: 1
+id: lucasilverentand-sonarr-4k
+category: Media
+name: Sonarr 4K
+version: "latest"
+tagline: 4K TV series manager
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sonarr-4k/icon.svg
+description: >-
+  Sonarr 4K manages a separate 2160p TV library. Use the tv-4k category and the
+  /data/series-4k root folder. Keep 4K quality profiles isolated through
+  Profilarr so this instance never falls back to HD releases.
+releaseNotes: Initial Umbrel package for the 4K TV side of the media stack.
+developer: Sonarr
+website: https://sonarr.tv
+dependencies:
+  - lucasilverentand-prowlarr
+  - lucasilverentand-qbittorrent
+  - lucasilverentand-sabnzbd
+repo: https://github.com/Sonarr/Sonarr
+support: https://github.com/Sonarr/Sonarr/issues
+port: 29986
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

@@ -1,0 +1,27 @@
+manifestVersion: 1
+id: lucasilverentand-radarr-4k
+category: Media
+name: Radarr 4K
+version: "latest"
+tagline: 4K movie manager
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-radarr-4k/icon.svg
+description: >-
+  Radarr 4K manages a separate 2160p movie library. Use the movies-4k category
+  and the /data/movies-4k root folder. Keep 4K quality profiles isolated through
+  Profilarr so this instance never falls back to HD releases.
+releaseNotes: Initial Umbrel package for the 4K movie side of the media stack.
+developer: Radarr
+website: https://radarr.video
+dependencies:
+  - lucasilverentand-prowlarr
+  - lucasilverentand-qbittorrent
+  - lucasilverentand-sabnzbd
+repo: https://github.com/Radarr/Radarr
+support: https://github.com/Radarr/Radarr/issues
+port: 29988
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

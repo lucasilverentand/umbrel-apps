@@ -1,0 +1,26 @@
+manifestVersion: 1
+id: lucasilverentand-lidarr
+category: Media
+name: Lidarr
+version: "latest"
+tagline: Music manager for the Arr stack
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-lidarr/icon.svg
+description: >-
+  Lidarr manages music downloads through the shared Prowlarr, qBittorrent, and
+  SABnzbd services. Use the music category and the /data/music root folder.
+releaseNotes: Initial Umbrel package for music management in the media stack.
+developer: Lidarr
+website: https://lidarr.audio
+dependencies:
+  - lucasilverentand-prowlarr
+  - lucasilverentand-qbittorrent
+  - lucasilverentand-sabnzbd
+repo: https://github.com/Lidarr/Lidarr
+support: https://github.com/Lidarr/Lidarr/issues
+port: 29993
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-sonarr_server_1
+      APP_PORT: 8989
+
+  server:
+    image: lscr.io/linuxserver/sonarr:latest@sha256:633e0e66d85ce4e9172608a37d3d24e124b3e485fc0d946f533c3bb5875227e9
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      SONARR_CATEGORY: tv
+      SONARR_ROOT_FOLDER: /data/series
+      PROWLARR_URL: http://lucasilverentand-prowlarr_server_1:9696
+      QBITTORRENT_URL: http://lucasilverentand-qbittorrent_server_1:8080
+      SABNZBD_URL: http://lucasilverentand-sabnzbd_server_1:8085
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/data

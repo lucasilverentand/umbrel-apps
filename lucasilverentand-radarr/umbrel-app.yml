@@ -1,0 +1,27 @@
+manifestVersion: 1
+id: lucasilverentand-radarr
+category: Media
+name: Radarr
+version: "latest"
+tagline: HD movie manager
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-radarr/icon.svg
+description: >-
+  Radarr manages HD movies and imports completed downloads from qBittorrent or
+  SABnzbd. Use the movies category and the /data/movies root folder for the
+  standard movie library.
+releaseNotes: Initial Umbrel package for the HD movie side of the media stack.
+developer: Radarr
+website: https://radarr.video
+dependencies:
+  - lucasilverentand-prowlarr
+  - lucasilverentand-qbittorrent
+  - lucasilverentand-sabnzbd
+repo: https://github.com/Radarr/Radarr
+support: https://github.com/Radarr/Radarr/issues
+port: 29987
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

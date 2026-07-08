@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-privado-vpn_server_1
+      APP_PORT: 8080
+
+  server:
+    image: ghcr.io/lucasilverentand/privado-proxy:dashboard@sha256:77312e1158419deb3735e60f6252ea0a8f331726d8b00ec2221bfe742b606c88
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      TZ: ${TZ:-Etc/UTC}
+      SOCK_PORT: "1080"
+      DASHBOARD_ENABLED: "true"
+      DASHBOARD_PORT: "8080"
+      PRIVADO_USERNAME: ${PRIVADO_USERNAME:-}
+      PRIVADO_PASSWORD: ${PRIVADO_PASSWORD:-}
+      PRIVADO_SERVER: ${PRIVADO_SERVER:-}
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config

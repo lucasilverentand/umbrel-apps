@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-sabnzbd_server_1
+      APP_PORT: 8085
+
+  server:
+    image: lscr.io/linuxserver/sabnzbd:latest@sha256:30cc2eb9e1c8b7c5bb90dbf3c7abb0e66643c21c3710e273a82d2f36239e176d
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      PORT: "8085"
+      PRIVADO_VPN_SOCKS_HOST: lucasilverentand-privado-vpn_server_1
+      PRIVADO_VPN_SOCKS_PORT: "1080"
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/data

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sonarr">
+  <rect width="256" height="256" rx="56" fill="#111827"/>
+  <path d="M61 75h134v106H61V75Zm26-28 18 28m64-28-18 28" fill="none" stroke="#6ee7f9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M92 111h72M92 145h49" stroke="#f8fbff" stroke-width="14" stroke-linecap="round"/>
+</svg>

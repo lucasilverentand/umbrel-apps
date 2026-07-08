@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-bazarr_server_1
+      APP_PORT: 6767
+
+  server:
+    image: lscr.io/linuxserver/bazarr:latest@sha256:5d916d07404296ec35ee726e13e0e558f05952724cf494a7f009d913fb2b12f3
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      SONARR_URL: http://lucasilverentand-sonarr_server_1:8989
+      SONARR_4K_URL: http://lucasilverentand-sonarr-4k_server_1:8989
+      RADARR_URL: http://lucasilverentand-radarr_server_1:7878
+      RADARR_4K_URL: http://lucasilverentand-radarr-4k_server_1:7878
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/data

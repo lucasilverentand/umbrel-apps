@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sonarr 4K">
+  <rect width="256" height="256" rx="56" fill="#0d1f2a"/>
+  <path d="M61 75h134v106H61V75Zm26-28 18 28m64-28-18 28" fill="none" stroke="#7dd3fc" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="128" y="149" text-anchor="middle" font-family="Arial, sans-serif" font-size="54" font-weight="800" fill="#f8fbff">4K</text>
+</svg>

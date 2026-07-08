@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-profilarr_server_1
+      APP_PORT: 6868
+
+  server:
+    image: santiagosayshey/profilarr:latest@sha256:8033e9c6d6995f37625afeb93d7020e99566f549ae83b65f1db7e11048952d0f
+    restart: on-failure
+    environment:
+      TZ: ${TZ:-Etc/UTC}
+      SONARR_URL: http://lucasilverentand-sonarr_server_1:8989
+      SONARR_4K_URL: http://lucasilverentand-sonarr-4k_server_1:8989
+      RADARR_URL: http://lucasilverentand-radarr_server_1:7878
+      RADARR_4K_URL: http://lucasilverentand-radarr-4k_server_1:7878
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config

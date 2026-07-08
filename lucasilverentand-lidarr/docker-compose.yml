@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-lidarr_server_1
+      APP_PORT: 8686
+
+  server:
+    image: lscr.io/linuxserver/lidarr:latest@sha256:ba7d43fd5d7de790c38c2dc8f2b2b54c1ac00a452784891c37385a43a039907a
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      LIDARR_CATEGORY: music
+      LIDARR_ROOT_FOLDER: /data/music
+      PROWLARR_URL: http://lucasilverentand-prowlarr_server_1:9696
+      QBITTORRENT_URL: http://lucasilverentand-qbittorrent_server_1:8080
+      SABNZBD_URL: http://lucasilverentand-sabnzbd_server_1:8085
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config
+      - ${UMBREL_ROOT}/data/storage/downloads:/data

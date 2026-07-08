@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lucasilverentand-prowlarr_server_1
+      APP_PORT: 9696
+
+  server:
+    image: lscr.io/linuxserver/prowlarr:latest@sha256:3e9bd62ca90c97c5df75b7012e10a29f6926e62807deeddc1dc89e6e2fd141e1
+    restart: on-failure
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: ${TZ:-Etc/UTC}
+      PRIVADO_VPN_SOCKS_HOST: lucasilverentand-privado-vpn_server_1
+      PRIVADO_VPN_SOCKS_PORT: "1080"
+      FLARESOLVERR_URL: http://lucasilverentand-flaresolverr_server_1:8191
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config

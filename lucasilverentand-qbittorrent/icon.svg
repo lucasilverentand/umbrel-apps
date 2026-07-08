@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="qBittorrent">
+  <rect width="256" height="256" rx="56" fill="#142033"/>
+  <circle cx="128" cy="128" r="76" fill="#3f8cff"/>
+  <path d="M96 130c0-31 17-51 44-51 22 0 38 15 38 37s-16 37-38 37h-16v28H96v-51Zm28 0h14c8 0 13-6 13-14s-5-14-13-14h-14v28Z" fill="#fff"/>
+</svg>

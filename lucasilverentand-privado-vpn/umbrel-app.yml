@@ -1,0 +1,27 @@
+manifestVersion: 1
+id: lucasilverentand-privado-vpn
+category: Networking
+name: Privado VPN
+version: "latest"
+tagline: Shared Privado SOCKS proxy for media apps
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-privado-vpn/icon.svg
+description: >-
+  Privado VPN runs the shared SOCKS proxy used by the media stack. The browser
+  dashboard is enabled by default so you can check WireGuard, SOCKS, handshake,
+  and public IP status after install. Add your Privado credentials before relying
+  on dependent download or indexer apps.
+releaseNotes: >-
+  Initial Umbrel package with dashboard access enabled and exported SOCKS
+  connection details for dependent apps.
+developer: Luca Silverentand
+website: https://github.com/lucasilverentand/privado-proxy
+dependencies: []
+repo: https://github.com/lucasilverentand/privado-proxy
+support: https://github.com/lucasilverentand/privado-proxy/issues
+port: 29980
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

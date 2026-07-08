@@ -1,0 +1,25 @@
+manifestVersion: 1
+id: lucasilverentand-qbittorrent
+category: Media
+name: qBittorrent
+version: "latest"
+tagline: Torrent download client for the Arr stack
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-qbittorrent/icon.svg
+description: >-
+  qBittorrent is the torrent download client for the media stack. Use the
+  Privado VPN SOCKS endpoint for torrent proxy settings and create categories
+  named movies, movies-4k, tv, tv-4k, and music for the Arr apps.
+releaseNotes: Initial Umbrel package with shared storage and Privado VPN dependency.
+developer: qBittorrent
+website: https://www.qbittorrent.org
+dependencies:
+  - lucasilverentand-privado-vpn
+repo: https://github.com/qbittorrent/qBittorrent
+support: https://github.com/qbittorrent/qBittorrent/issues
+port: 29983
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""

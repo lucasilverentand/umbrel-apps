@@ -1,0 +1,28 @@
+manifestVersion: 1
+id: lucasilverentand-bazarr
+category: Media
+name: Bazarr
+version: "latest"
+tagline: Subtitle manager for Sonarr and Radarr
+icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-bazarr/icon.svg
+description: >-
+  Bazarr manages subtitles for the standard and 4K Sonarr and Radarr instances.
+  Connect it to each Arr server after install and point it at the shared /data
+  media tree.
+releaseNotes: Initial Umbrel package for subtitle management across HD and 4K libraries.
+developer: Bazarr
+website: https://www.bazarr.media
+dependencies:
+  - lucasilverentand-sonarr
+  - lucasilverentand-sonarr-4k
+  - lucasilverentand-radarr
+  - lucasilverentand-radarr-4k
+repo: https://github.com/morpheus65535/bazarr
+support: https://github.com/morpheus65535/bazarr/issues
+port: 29989
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: ""
