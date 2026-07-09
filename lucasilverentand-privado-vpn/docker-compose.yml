@@ -7,10 +7,12 @@ services:
       APP_PORT: 8080
 
   server:
-    image: ghcr.io/lucasilverentand/privado-proxy:dashboard@sha256:b21cce882c88546a692cc5ca730d0e3215df7f41889564da141eac35dffae649
+    image: ghcr.io/lucasilverentand/privado-proxy:dashboard@sha256:c3277a5cc782d8537361fe54c9dd6bf3aac295d0b8dd0d423fe67b320e460c76
     restart: on-failure
     cap_add:
       - NET_ADMIN
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: "1"
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
