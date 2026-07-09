@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-sabnzbd
 category: Media
 name: SABnzbd
-version: "5.0.4"
+version: "5.0.4-umbrel.1"
 tagline: Usenet download client for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sabnzbd/icon.svg
 description: >-
@@ -10,8 +10,8 @@ description: >-
   in the web UI and use categories named movies, movies-4k, tv, tv-4k, and music
   so Sonarr, Radarr, and Lidarr can import completed downloads.
 releaseNotes: >-
-  Fixes the Umbrel proxy target to use SABnzbd's supported internal port so the
-  setup wizard and WebUI open correctly after install.
+  Allows Sonarr, Radarr, and Lidarr to reach SABnzbd through its internal Umbrel
+  hostname while retaining the supported WebUI proxy port.
 developer: SABnzbd
 website: https://sabnzbd.org
 dependencies:

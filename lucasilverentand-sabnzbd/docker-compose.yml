@@ -9,6 +9,67 @@ services:
   server:
     image: lscr.io/linuxserver/sabnzbd:latest@sha256:30cc2eb9e1c8b7c5bb90dbf3c7abb0e66643c21c3710e273a82d2f36239e176d
     restart: on-failure
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        set -eu
+
+        config=/config/sabnzbd.ini
+        internal_host=lucasilverentand-sabnzbd_server_1
+        mkdir -p /config
+
+        if [ ! -f "$$config" ]; then
+          printf '[misc]\nhost_whitelist = %s\n' "$$internal_host" > "$$config"
+        else
+          temporary=$$(mktemp)
+          SAB_INTERNAL_HOST="$$internal_host" awk '
+            BEGIN {
+              host = ENVIRON["SAB_INTERNAL_HOST"]
+              in_misc = 0
+              found_misc = 0
+              written = 0
+            }
+            /^\[misc\][[:space:]]*$$/ {
+              print
+              in_misc = 1
+              found_misc = 1
+              next
+            }
+            /^\[/ {
+              if (in_misc && !written) {
+                print "host_whitelist = " host
+                written = 1
+              }
+              in_misc = 0
+              print
+              next
+            }
+            in_misc && /^[[:space:]]*host_whitelist[[:space:]]*=/ {
+              value = $$0
+              sub(/^[^=]*=[[:space:]]*/, "", value)
+              if (value == "") value = host
+              else if (index(value, host) == 0) value = value ", " host
+              print "host_whitelist = " value
+              written = 1
+              next
+            }
+            { print }
+            END {
+              if (in_misc && !written) print "host_whitelist = " host
+              else if (!found_misc) {
+                print "[misc]"
+                print "host_whitelist = " host
+              }
+            }
+          ' "$$config" > "$$temporary"
+          cat "$$temporary" > "$$config"
+          rm -f "$$temporary"
+        fi
+
+        echo "Allowed the SABnzbd Umbrel service hostname"
+        exec /init
     environment:
       PUID: "1000"
       PGID: "1000"

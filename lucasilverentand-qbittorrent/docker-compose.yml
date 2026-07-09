@@ -14,8 +14,6 @@ services:
       - -c
     command:
       - |
-        cat > /custom-cont-init.d/50-umbrel-config <<'SCRIPT'
-        #!/bin/sh
         set -eu
 
         config=/config/qBittorrent/qBittorrent.conf
@@ -58,8 +56,6 @@ services:
         set_preference 'Downloads\TempPathEnabled' 'true'
 
         echo "Applied qBittorrent Umbrel WebUI and download-path defaults"
-        SCRIPT
-        chmod 755 /custom-cont-init.d/50-umbrel-config
         exec /init
     environment:
       PUID: "1000"
