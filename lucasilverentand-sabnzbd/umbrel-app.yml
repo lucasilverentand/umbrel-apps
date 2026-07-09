@@ -2,14 +2,16 @@ manifestVersion: 1
 id: lucasilverentand-sabnzbd
 category: Media
 name: SABnzbd
-version: "latest"
+version: "5.0.4"
 tagline: Usenet download client for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sabnzbd/icon.svg
 description: >-
   SABnzbd is the Usenet download client for the media stack. Configure providers
   in the web UI and use categories named movies, movies-4k, tv, tv-4k, and music
   so Sonarr, Radarr, and Lidarr can import completed downloads.
-releaseNotes: Initial Umbrel package with shared storage and Privado VPN dependency.
+releaseNotes: >-
+  Fixes the Umbrel proxy target to use SABnzbd's supported internal port so the
+  setup wizard and WebUI open correctly after install.
 developer: SABnzbd
 website: https://sabnzbd.org
 dependencies:
