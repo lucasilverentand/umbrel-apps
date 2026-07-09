@@ -7,7 +7,7 @@ services:
       APP_PORT: 8080
 
   server:
-    image: ghcr.io/lucasilverentand/privado-proxy:dashboard@sha256:12ad3ce6924eff569636450ed1d136f34d79fa8b422187dae60a84ebcdc3140c
+    image: ghcr.io/lucasilverentand/privado-proxy:dashboard@sha256:b21cce882c88546a692cc5ca730d0e3215df7f41889564da141eac35dffae649
     restart: on-failure
     cap_add:
       - NET_ADMIN
