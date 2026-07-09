@@ -9,6 +9,58 @@ services:
   server:
     image: lscr.io/linuxserver/qbittorrent:latest@sha256:d8488fb24969bb0954cf64a1ca1cf7a763031641ba4246734964faea6f0b807a
     restart: on-failure
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        cat > /custom-cont-init.d/50-umbrel-config <<'SCRIPT'
+        #!/bin/sh
+        set -eu
+
+        config=/config/qBittorrent/qBittorrent.conf
+        mkdir -p "$$(dirname "$$config")"
+        if [ ! -f "$$config" ]; then
+          printf '[Preferences]\n' > "$$config"
+        fi
+
+        set_preference() {
+          key=$$1
+          value=$$2
+          temporary=$$(mktemp)
+
+          QBIT_KEY="$$key" QBIT_VALUE="$$value" awk '
+            BEGIN {
+              key = ENVIRON["QBIT_KEY"]
+              value = ENVIRON["QBIT_VALUE"]
+              written = 0
+            }
+            $$0 == "[Preferences]" {
+              print
+              print key "=" value
+              written = 1
+              next
+            }
+            index($$0, key "=") == 1 { next }
+            { print }
+            END { if (!written) exit 42 }
+          ' "$$config" > "$$temporary"
+
+          cat "$$temporary" > "$$config"
+          rm -f "$$temporary"
+        }
+
+        set_preference 'WebUI\HostHeaderValidation' 'false'
+        set_preference 'WebUI\ServerDomains' '*'
+        set_preference 'WebUI\SecureCookie' 'false'
+        set_preference 'Downloads\SavePath' '/data/complete'
+        set_preference 'Downloads\TempPath' '/data/incomplete'
+        set_preference 'Downloads\TempPathEnabled' 'true'
+
+        echo "Applied qBittorrent Umbrel WebUI and download-path defaults"
+        SCRIPT
+        chmod 755 /custom-cont-init.d/50-umbrel-config
+        exec /init
     environment:
       PUID: "1000"
       PGID: "1000"
@@ -19,5 +71,4 @@ services:
       PRIVADO_VPN_SOCKS_PORT: "1080"
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
-      - ${APP_DATA_DIR}/data/50-umbrel-config:/custom-cont-init.d/50-umbrel-config:ro
       - ${UMBREL_ROOT}/data/storage/downloads:/data

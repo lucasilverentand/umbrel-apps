@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-qbittorrent
 category: Media
 name: qBittorrent
-version: "5.2.3"
+version: "5.2.4-umbrel.1"
 tagline: Torrent download client for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-qbittorrent/icon.svg
 description: >-
@@ -10,9 +10,8 @@ description: >-
   Privado VPN SOCKS endpoint for torrent proxy settings and create categories
   named movies, movies-4k, tv, tv-4k, and music for the Arr apps.
 releaseNotes: >-
-  Adds Umbrel reverse-proxy support and configures complete and incomplete
-  download paths in shared storage so the WebUI and Arr imports work after
-  install.
+  Fixes the Umbrel startup hook so reverse-proxy access and shared complete and
+  incomplete download paths are applied reliably on new and existing installs.
 developer: qBittorrent
 website: https://www.qbittorrent.org
 dependencies:
