@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-privado-vpn
 category: Networking
 name: Privado VPN
-version: "latest"
+version: "1.1.0"
 tagline: Shared Privado SOCKS proxy for media apps
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-privado-vpn/icon.svg
 description: >-
@@ -11,8 +11,8 @@ description: >-
   WireGuard, SOCKS, handshake, and public IP status after install, and let the
   proxy select an available server automatically.
 releaseNotes: >-
-  Updates the dashboard-enabled proxy image with login-only setup, improved
-  status layout, and automatic server selection when no location is configured.
+  Replaces the manual server field with login-only setup, improves the status
+  layout, and automatically selects an available server after you sign in.
 developer: Luca Silverentand
 website: https://github.com/lucasilverentand/privado-proxy
 dependencies: []
