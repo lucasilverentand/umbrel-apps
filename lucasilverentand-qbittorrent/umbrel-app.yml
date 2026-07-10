@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-qbittorrent
 category: Media
 name: qBittorrent
-version: "5.2.4-umbrel.4"
+version: "5.2.4-umbrel.5"
 tagline: Torrent download client for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-qbittorrent/icon.svg
 description: >-
@@ -10,9 +10,9 @@ description: >-
   automatically applies the Privado VPN SOCKS5 proxy and creates movies,
   movies-4k, tv, tv-4k, and music categories for the Arr apps.
 releaseNotes: >-
-  Automatically configures the shared Privado SOCKS5 proxy and Arr categories.
-  Umbrel's account login remains the only browser login; no package password is
-  hardcoded or generated separately.
+  Corrects the proxy type for qBittorrent 5 so the automatically configured
+  Privado endpoint is enabled as SOCKS5. Arr categories and Umbrel's shared
+  browser login remain configured without a hardcoded package password.
 developer: qBittorrent
 website: https://www.qbittorrent.org
 dependencies:
