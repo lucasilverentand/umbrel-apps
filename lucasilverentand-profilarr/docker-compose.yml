@@ -7,13 +7,20 @@ services:
       APP_PORT: 6868
 
   server:
-    image: santiagosayshey/profilarr:latest@sha256:8033e9c6d6995f37625afeb93d7020e99566f549ae83b65f1db7e11048952d0f
+    image: ghcr.io/dictionarry-hub/profilarr:2.0.9@sha256:7a9b5112ff227320d17c65ab643a5d875713e6235991ef04a8e482ec51427902
     restart: on-failure
     environment:
+      PUID: "1000"
+      PGID: "1000"
       TZ: ${TZ:-Etc/UTC}
-      SONARR_URL: http://lucasilverentand-sonarr_server_1:8989
-      SONARR_4K_URL: http://lucasilverentand-sonarr-4k_server_1:8989
-      RADARR_URL: http://lucasilverentand-radarr_server_1:7878
-      RADARR_4K_URL: http://lucasilverentand-radarr-4k_server_1:7878
+      PARSER_HOST: parser
+      PARSER_PORT: "5000"
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
+    depends_on:
+      parser:
+        condition: service_healthy
+
+  parser:
+    image: ghcr.io/dictionarry-hub/profilarr-parser:2.0.9@sha256:16b22ef6485e135cc660cd511697c637d44649753d02397c9374e1317cfaaf0e
+    restart: on-failure
