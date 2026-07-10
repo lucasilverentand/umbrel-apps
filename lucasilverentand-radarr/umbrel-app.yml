@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-radarr
 category: Media
 name: Radarr
-version: "6.1.1.10360-umbrel.3"
+version: "6.1.1.10360-umbrel.4"
 tagline: HD movie manager
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-radarr/icon.svg
 description: >-
@@ -10,9 +10,8 @@ description: >-
   SABnzbd. Installation creates the /data/movies root folder, configures both
   download clients with the movies category, and registers Radarr in Prowlarr.
 releaseNotes: >-
-  Adds idempotent install-time configuration for the root folder, qBittorrent,
-  SABnzbd, and full Prowlarr indexer synchronization using persisted random
-  internal API credentials.
+  Mounts Umbrel's network storage folder at /network so movie libraries on a
+  host-mounted network share can be managed alongside local downloads.
 developer: Radarr
 website: https://radarr.video
 dependencies:
