@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-prowlarr
 category: Media
 name: Prowlarr
-version: "2.3.5.5327-umbrel.1"
+version: "2.3.5.5327-umbrel.2"
 tagline: Indexer manager for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-prowlarr/icon.svg
 description: >-
@@ -10,8 +10,8 @@ description: >-
   Installation automatically routes indexer traffic through Privado VPN and
   keeps local Arr and FlareSolverr connections outside the proxy.
 releaseNotes: >-
-  Automatically configures the Privado SOCKS5 proxy and Umbrel account
-  authentication. No separate Prowlarr login or proxy setup is required.
+  Fixes first-start configuration on LinuxServer images while automatically
+  applying the Privado SOCKS5 proxy and Umbrel account authentication.
 developer: Prowlarr
 website: https://prowlarr.com
 dependencies:

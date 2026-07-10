@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-sonarr-4k
 category: Media
 name: Sonarr 4K
-version: "4.0.17.2952-umbrel.1"
+version: "4.0.17.2952-umbrel.2"
 tagline: 4K TV series manager
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sonarr-4k/icon.svg
 description: >-
@@ -10,8 +10,8 @@ description: >-
   /data/series-4k root folder. Keep 4K quality profiles isolated through
   Profilarr so this instance never falls back to HD releases.
 releaseNotes: >-
-  Uses Umbrel's account login through external authentication and corrects the
-  internal SABnzbd service URL. No separate Sonarr password is required.
+  Fixes first-start configuration on LinuxServer images while retaining Umbrel
+  external authentication and the corrected internal SABnzbd service URL.
 developer: Sonarr
 website: https://sonarr.tv
 dependencies:

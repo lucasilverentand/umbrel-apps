@@ -22,7 +22,7 @@ services:
         set_xml_value() {
           key=$$1
           value=$$2
-          temporary=$$(mktemp)
+          temporary=$$(mktemp /config/.umbrel-config.XXXXXX)
           XML_KEY="$$key" XML_VALUE="$$value" awk '
             BEGIN {
               key = ENVIRON["XML_KEY"]
