@@ -9,12 +9,64 @@ services:
   server:
     image: lscr.io/linuxserver/prowlarr:latest@sha256:3e9bd62ca90c97c5df75b7012e10a29f6926e62807deeddc1dc89e6e2fd141e1
     restart: on-failure
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        set -eu
+
+        config=/config/config.xml
+        mkdir -p /config
+        if [ ! -f "$$config" ]; then
+          printf '<Config>\n</Config>\n' > "$$config"
+        fi
+
+        set_xml_value() {
+          key=$$1
+          value=$$2
+          temporary=$$(mktemp)
+          XML_KEY="$$key" XML_VALUE="$$value" awk '
+            BEGIN {
+              key = ENVIRON["XML_KEY"]
+              value = ENVIRON["XML_VALUE"]
+              open = "<" key ">"
+              closing = "</" key ">"
+              written = 0
+            }
+            index($$0, open) && index($$0, closing) {
+              print "  " open value closing
+              written = 1
+              next
+            }
+            index($$0, "</Config>") && !written {
+              print "  " open value closing
+              written = 1
+            }
+            { print }
+            END { if (!written) exit 42 }
+          ' "$$config" > "$$temporary"
+          cat "$$temporary" > "$$config"
+          rm -f "$$temporary"
+        }
+
+        set_xml_value AuthenticationMethod External
+        set_xml_value AuthenticationRequired DisabledForLocalAddresses
+        set_xml_value ProxyEnabled True
+        set_xml_value ProxyType Socks5
+        set_xml_value ProxyHostname "$$PRIVADO_VPN_SOCKS_HOST"
+        set_xml_value ProxyPort "$$PRIVADO_VPN_SOCKS_PORT"
+        set_xml_value ProxyBypassFilter 'localhost,127.0.0.1,lucasilverentand-flaresolverr_server_1,lucasilverentand-sonarr_server_1,lucasilverentand-sonarr-4k_server_1,lucasilverentand-radarr_server_1,lucasilverentand-radarr-4k_server_1,lucasilverentand-lidarr_server_1'
+        set_xml_value ProxyBypassLocalAddresses True
+
+        echo "Applied Prowlarr Umbrel authentication and Privado proxy settings"
+        exec /init
     environment:
       PUID: "1000"
       PGID: "1000"
       TZ: ${TZ:-Etc/UTC}
-      PRIVADO_VPN_SOCKS_HOST: lucasilverentand-privado-vpn_server_1
-      PRIVADO_VPN_SOCKS_PORT: "1080"
+      PRIVADO_VPN_SOCKS_HOST: ${PRIVADO_VPN_SOCKS_HOST:-lucasilverentand-privado-vpn_server_1}
+      PRIVADO_VPN_SOCKS_PORT: ${PRIVADO_VPN_SOCKS_PORT:-1080}
       FLARESOLVERR_URL: http://lucasilverentand-flaresolverr_server_1:8191
     volumes:
       - ${APP_DATA_DIR}/data/config:/config

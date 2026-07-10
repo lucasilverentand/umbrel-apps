@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-privado-vpn
 category: Networking
 name: Privado VPN
-version: "1.2.1"
+version: "1.2.2"
 tagline: Shared Privado SOCKS proxy for media apps
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-privado-vpn/icon.svg
 description: >-
@@ -11,9 +11,8 @@ description: >-
   WireGuard, SOCKS, handshake, and public IP status after install, and let the
   proxy select an available server automatically.
 releaseNotes: >-
-  Fixes Privado API login by installing the required CA certificate bundle and
-  enables the WireGuard source-validation setting in the app container. This
-  restores automatic VPN startup for saved dashboard logins.
+  Exports a reusable SOCKS5 URL for dependent media apps and makes Umbrel's
+  account login the explicit authentication boundary for the dashboard.
 developer: Luca Silverentand
 website: https://github.com/lucasilverentand/privado-proxy
 dependencies: []

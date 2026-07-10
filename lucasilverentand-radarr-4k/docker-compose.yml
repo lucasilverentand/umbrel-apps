@@ -9,6 +9,48 @@ services:
   server:
     image: lscr.io/linuxserver/radarr:latest@sha256:39da107b5a9371fdaa651bd188049b863716a815385eb3a30d41071b7e1aeb33
     restart: on-failure
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        set -eu
+        config=/config/config.xml
+        mkdir -p /config
+        [ -f "$$config" ] || printf '<Config>\n</Config>\n' > "$$config"
+
+        set_xml_value() {
+          key=$$1
+          value=$$2
+          temporary=$$(mktemp)
+          XML_KEY="$$key" XML_VALUE="$$value" awk '
+            BEGIN {
+              key = ENVIRON["XML_KEY"]
+              value = ENVIRON["XML_VALUE"]
+              open = "<" key ">"
+              closing = "</" key ">"
+              written = 0
+            }
+            index($$0, open) && index($$0, closing) {
+              print "  " open value closing
+              written = 1
+              next
+            }
+            index($$0, "</Config>") && !written {
+              print "  " open value closing
+              written = 1
+            }
+            { print }
+            END { if (!written) exit 42 }
+          ' "$$config" > "$$temporary"
+          cat "$$temporary" > "$$config"
+          rm -f "$$temporary"
+        }
+
+        set_xml_value AuthenticationMethod External
+        set_xml_value AuthenticationRequired DisabledForLocalAddresses
+        echo "Applied Radarr 4K Umbrel authentication settings"
+        exec /init
     environment:
       PUID: "1000"
       PGID: "1000"
@@ -17,7 +59,7 @@ services:
       RADARR_ROOT_FOLDER: /data/movies-4k
       PROWLARR_URL: http://lucasilverentand-prowlarr_server_1:9696
       QBITTORRENT_URL: http://lucasilverentand-qbittorrent_server_1:8080
-      SABNZBD_URL: http://lucasilverentand-sabnzbd_server_1:8085
+      SABNZBD_URL: http://lucasilverentand-sabnzbd_server_1:8080
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
       - ${UMBREL_ROOT}/data/storage/downloads:/data

@@ -57,6 +57,36 @@ services:
         set_preference 'Downloads\TempPath' '/data/incomplete'
         set_preference 'Downloads\TempPathEnabled' 'true'
 
+        bootstrap_privado() {
+          api=http://127.0.0.1:8080/api/v2
+          attempts=0
+
+          until curl -fsS "$$api/app/version" >/dev/null 2>&1; do
+            attempts=$$((attempts + 1))
+            if [ "$$attempts" -ge 120 ]; then
+              echo "Timed out waiting to apply qBittorrent Privado settings" >&2
+              return
+            fi
+            sleep 2
+          done
+
+          preferences=$$(printf \
+            '{"proxy_type":2,"proxy_ip":"%s","proxy_port":%s,"proxy_peer_connections":true,"proxy_hostname_lookup":true,"proxy_bittorrent":true,"proxy_misc":true,"proxy_rss":true,"proxy_torrents_only":false}' \
+            "$$PRIVADO_VPN_SOCKS_HOST" "$$PRIVADO_VPN_SOCKS_PORT")
+          curl -fsS -X POST \
+            --data-urlencode "json=$$preferences" \
+            "$$api/app/setPreferences" >/dev/null
+
+          for category in movies movies-4k tv tv-4k music; do
+            curl -fsS -X POST \
+              --data-urlencode "category=$$category" \
+              "$$api/torrents/createCategory" >/dev/null 2>&1 || true
+          done
+
+          echo "Applied qBittorrent Privado proxy and Arr categories"
+        }
+
+        bootstrap_privado &
         echo "Applied qBittorrent Umbrel WebUI and download-path defaults"
         exec /init
     environment:
@@ -65,8 +95,8 @@ services:
       TZ: ${TZ:-Etc/UTC}
       WEBUI_PORT: "8080"
       TORRENTING_PORT: "6881"
-      PRIVADO_VPN_SOCKS_HOST: lucasilverentand-privado-vpn_server_1
-      PRIVADO_VPN_SOCKS_PORT: "1080"
+      PRIVADO_VPN_SOCKS_HOST: ${PRIVADO_VPN_SOCKS_HOST:-lucasilverentand-privado-vpn_server_1}
+      PRIVADO_VPN_SOCKS_PORT: ${PRIVADO_VPN_SOCKS_PORT:-1080}
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
       - ${UMBREL_ROOT}/data/storage/downloads:/data

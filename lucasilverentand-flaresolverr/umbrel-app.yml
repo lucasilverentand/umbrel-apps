@@ -2,14 +2,16 @@ manifestVersion: 1
 id: lucasilverentand-flaresolverr
 category: Networking
 name: FlareSolverr
-version: "latest"
+version: "3.5.0-umbrel.1"
 tagline: Browser challenge solver for Prowlarr indexers
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-flaresolverr/icon.svg
 description: >-
   FlareSolverr provides a local browser challenge solving service for indexers
-  that require it. Install Privado VPN first when you want the wider media stack
-  to keep indexer and download traffic behind the shared VPN path.
-releaseNotes: Initial Umbrel package for the Silverswarm-style media stack.
+  that require it. Its browser traffic uses the shared Privado VPN SOCKS5 proxy
+  automatically, while Umbrel protects the service with your account login.
+releaseNotes: >-
+  Automatically routes browser challenge traffic through the Privado VPN
+  dependency and uses Umbrel's shared login instead of a separate credential.
 developer: FlareSolverr
 website: https://github.com/FlareSolverr/FlareSolverr
 dependencies:

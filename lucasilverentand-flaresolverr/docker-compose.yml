@@ -13,3 +13,4 @@ services:
       TZ: ${TZ:-Etc/UTC}
       LOG_LEVEL: info
       PROMETHEUS_ENABLED: "false"
+      PROXY_URL: ${PRIVADO_VPN_SOCKS_URL:-socks5://lucasilverentand-privado-vpn_server_1:1080}

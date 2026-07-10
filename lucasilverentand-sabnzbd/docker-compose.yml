@@ -18,64 +18,93 @@ services:
 
         config=/config/sabnzbd.ini
         internal_host=lucasilverentand-sabnzbd_server_1
-        mkdir -p /config
+        api=http://127.0.0.1:8080/api
 
-        if [ ! -f "$$config" ]; then
-          printf '[misc]\nhost_whitelist = %s\n' "$$internal_host" > "$$config"
-        else
-          temporary=$$(mktemp)
-          SAB_INTERNAL_HOST="$$internal_host" awk '
-            BEGIN {
-              host = ENVIRON["SAB_INTERNAL_HOST"]
-              in_misc = 0
-              found_misc = 0
-              written = 0
-            }
-            /^\[misc\][[:space:]]*$$/ {
-              print
-              in_misc = 1
-              found_misc = 1
-              next
-            }
-            /^\[/ {
-              if (in_misc && !written) {
-                print "host_whitelist = " host
-                written = 1
-              }
-              in_misc = 0
-              print
-              next
-            }
-            in_misc && /^[[:space:]]*host_whitelist[[:space:]]*=/ {
+        bootstrap_sabnzbd() {
+          attempts=0
+          api_key=
+
+          while [ "$$attempts" -lt 120 ]; do
+            if curl -fsS --get "$$api" --data-urlencode mode=version >/dev/null 2>&1 \
+              && [ -f "$$config" ]; then
+              api_key=$$(awk -F= '
+                /^[[:space:]]*api_key[[:space:]]*=/ {
+                  value = $$0
+                  sub(/^[^=]*=[[:space:]]*/, "", value)
+                  sub(/[[:space:]]+$$/, "", value)
+                  print value
+                  exit
+                }
+              ' "$$config")
+              [ -n "$$api_key" ] && break
+            fi
+            attempts=$$((attempts + 1))
+            sleep 2
+          done
+
+          if [ -z "$$api_key" ]; then
+            echo "Timed out waiting to apply SABnzbd Umbrel settings" >&2
+            return
+          fi
+
+          set_misc() {
+            curl -fsS --get "$$api" \
+              --data-urlencode mode=set_config \
+              --data-urlencode section=misc \
+              --data-urlencode "keyword=$$1" \
+              --data-urlencode "value=$$2" \
+              --data-urlencode "apikey=$$api_key" \
+              --data-urlencode output=json >/dev/null
+          }
+
+          set_category() {
+            curl -fsS --get "$$api" \
+              --data-urlencode mode=set_config \
+              --data-urlencode section=categories \
+              --data-urlencode "name=$$1" \
+              --data-urlencode "dir=$$2" \
+              --data-urlencode "apikey=$$api_key" \
+              --data-urlencode output=json >/dev/null
+          }
+
+          current_hosts=$$(awk -F= '
+            /^[[:space:]]*host_whitelist[[:space:]]*=/ {
               value = $$0
               sub(/^[^=]*=[[:space:]]*/, "", value)
-              if (value == "") value = host
-              else if (index(value, host) == 0) value = value ", " host
-              print "host_whitelist = " value
-              written = 1
-              next
+              sub(/[[:space:]]+$$/, "", value)
+              print value
+              exit
             }
-            { print }
-            END {
-              if (in_misc && !written) print "host_whitelist = " host
-              else if (!found_misc) {
-                print "[misc]"
-                print "host_whitelist = " host
-              }
-            }
-          ' "$$config" > "$$temporary"
-          cat "$$temporary" > "$$config"
-          rm -f "$$temporary"
-        fi
+          ' "$$config")
+          case ",$$current_hosts," in
+            *",$$internal_host,"*) ;;
+            *) current_hosts=$${current_hosts:+$$current_hosts, }$$internal_host ;;
+          esac
 
-        echo "Allowed the SABnzbd Umbrel service hostname"
+          set_misc host_whitelist "$$current_hosts"
+          set_misc socks5_proxy "socks5://$$PRIVADO_VPN_SOCKS_HOST:$$PRIVADO_VPN_SOCKS_PORT"
+          set_misc complete_dir /data/complete
+          set_misc download_dir /data/incomplete
+          set_misc username ""
+          set_misc password ""
+
+          set_category movies movies
+          set_category movies-4k movies-4k
+          set_category tv tv
+          set_category tv-4k tv-4k
+          set_category music music
+
+          echo "Applied SABnzbd Privado proxy, shared login, paths, and categories"
+        }
+
+        bootstrap_sabnzbd &
         exec /init
     environment:
       PUID: "1000"
       PGID: "1000"
       TZ: ${TZ:-Etc/UTC}
-      PRIVADO_VPN_SOCKS_HOST: lucasilverentand-privado-vpn_server_1
-      PRIVADO_VPN_SOCKS_PORT: "1080"
+      PRIVADO_VPN_SOCKS_HOST: ${PRIVADO_VPN_SOCKS_HOST:-lucasilverentand-privado-vpn_server_1}
+      PRIVADO_VPN_SOCKS_PORT: ${PRIVADO_VPN_SOCKS_PORT:-1080}
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
       - ${UMBREL_ROOT}/data/storage/downloads:/data
