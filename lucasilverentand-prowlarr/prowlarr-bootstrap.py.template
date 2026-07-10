@@ -46,6 +46,24 @@ def set_fields(provider, values):
 def configure():
     base_url = f"{required('PROWLARR_URL').rstrip('/')}/api/v1"
     api_key = required("PROWLARR_API_KEY")
+    tags = request_json(base_url, "tag", api_key)
+    flaresolverr_tag = next(
+        (
+            tag
+            for tag in tags
+            if tag.get("label", "").casefold() == "flaresolverr"
+        ),
+        None,
+    )
+    if flaresolverr_tag is None:
+        flaresolverr_tag = request_json(
+            base_url,
+            "tag",
+            api_key,
+            "POST",
+            {"label": "flaresolverr"},
+        )
+
     schemas = request_json(base_url, "indexerproxy/schema", api_key)
     existing = request_json(base_url, "indexerproxy", api_key)
     payload = next(
@@ -57,7 +75,7 @@ def configure():
         payload,
         {"host": required("FLARESOLVERR_URL"), "requestTimeout": 60},
     )
-    payload.update({"name": "FlareSolverr", "tags": []})
+    payload.update({"name": "FlareSolverr", "tags": [flaresolverr_tag["id"]]})
 
     match = next(
         (

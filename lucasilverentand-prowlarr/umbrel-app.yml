@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-prowlarr
 category: Media
 name: Prowlarr
-version: "2.3.5.5327-umbrel.3"
+version: "2.3.5.5327-umbrel.4"
 tagline: Indexer manager for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-prowlarr/icon.svg
 description: >-
@@ -11,8 +11,9 @@ description: >-
   keeps local Arr and FlareSolverr connections outside the proxy.
 releaseNotes: >-
   Adds a persistent random internal API key and automatically registers
-  FlareSolverr. Sonarr, Radarr, and Lidarr packages can now register themselves
-  with full indexer sync during installation.
+  FlareSolverr with a reusable flaresolverr tag. Sonarr, Radarr, and Lidarr
+  packages can now register themselves with full indexer sync during
+  installation.
 developer: Prowlarr
 website: https://prowlarr.com
 dependencies:
