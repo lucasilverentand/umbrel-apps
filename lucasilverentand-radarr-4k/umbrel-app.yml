@@ -2,16 +2,17 @@ manifestVersion: 1
 id: lucasilverentand-radarr-4k
 category: Media
 name: Radarr 4K
-version: "6.1.1.10360-umbrel.2"
+version: "6.1.1.10360-umbrel.3"
 tagline: 4K movie manager
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-radarr-4k/icon.svg
 description: >-
-  Radarr 4K manages a separate 2160p movie library. Use the movies-4k category
-  and the /data/movies-4k root folder. Keep 4K quality profiles isolated through
-  Profilarr so this instance never falls back to HD releases.
+  Radarr 4K manages a separate 2160p movie library. Installation creates the
+  /data/movies-4k root folder, configures both download clients with the
+  movies-4k category, and registers this instance in Prowlarr.
 releaseNotes: >-
-  Fixes first-start configuration on LinuxServer images while retaining Umbrel
-  external authentication and the corrected internal SABnzbd service URL.
+  Adds idempotent install-time configuration for the 4K root folder, both
+  download clients, and full Prowlarr indexer synchronization using persisted
+  random internal API credentials.
 developer: Radarr
 website: https://radarr.video
 dependencies:

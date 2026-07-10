@@ -20,3 +20,26 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
       - ${UMBREL_ROOT}/data/storage/downloads:/data
+
+  configurator:
+    image: python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      - server
+    command:
+      - python3
+      - /bootstrap.py
+    environment:
+      BAZARR_URL: http://lucasilverentand-bazarr_server_1:6767
+      SONARR_HOST: lucasilverentand-sonarr_server_1
+      SONARR_PORT: "8989"
+      SONARR_API_KEY: ${LUCASILVERENTAND_SONARR_API_KEY:-}
+      RADARR_HOST: lucasilverentand-radarr_server_1
+      RADARR_PORT: "7878"
+      RADARR_API_KEY: ${LUCASILVERENTAND_RADARR_API_KEY:-}
+      PRIVADO_VPN_SOCKS_HOST: ${PRIVADO_VPN_SOCKS_HOST:-lucasilverentand-privado-vpn_server_1}
+      PRIVADO_VPN_SOCKS_PORT: ${PRIVADO_VPN_SOCKS_PORT:-1080}
+    volumes:
+      - ./bazarr-bootstrap.py.template:/bootstrap.py:ro
+      - ${APP_DATA_DIR}/data/config:/config:ro

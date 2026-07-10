@@ -25,3 +25,29 @@ services:
   parser:
     image: ghcr.io/dictionarry-hub/profilarr-parser:2.0.9@sha256:16b22ef6485e135cc660cd511697c637d44649753d02397c9374e1317cfaaf0e
     restart: on-failure
+
+  configurator:
+    image: python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      - server
+    command:
+      - python3
+      - /bootstrap.py
+    environment:
+      SONARR_URL: ${LUCASILVERENTAND_SONARR_URL:-http://lucasilverentand-sonarr_server_1:8989}
+      SONARR_EXTERNAL_URL: http://${DEVICE_DOMAIN_NAME:-umbrel.local}:29985
+      SONARR_API_KEY: ${LUCASILVERENTAND_SONARR_API_KEY:-}
+      SONARR_4K_URL: ${LUCASILVERENTAND_SONARR_4K_URL:-http://lucasilverentand-sonarr-4k_server_1:8989}
+      SONARR_4K_EXTERNAL_URL: http://${DEVICE_DOMAIN_NAME:-umbrel.local}:29986
+      SONARR_4K_API_KEY: ${LUCASILVERENTAND_SONARR_4K_API_KEY:-}
+      RADARR_URL: ${LUCASILVERENTAND_RADARR_URL:-http://lucasilverentand-radarr_server_1:7878}
+      RADARR_EXTERNAL_URL: http://${DEVICE_DOMAIN_NAME:-umbrel.local}:29987
+      RADARR_API_KEY: ${LUCASILVERENTAND_RADARR_API_KEY:-}
+      RADARR_4K_URL: ${LUCASILVERENTAND_RADARR_4K_URL:-http://lucasilverentand-radarr-4k_server_1:7878}
+      RADARR_4K_EXTERNAL_URL: http://${DEVICE_DOMAIN_NAME:-umbrel.local}:29988
+      RADARR_4K_API_KEY: ${LUCASILVERENTAND_RADARR_4K_API_KEY:-}
+    volumes:
+      - ./profilarr-bootstrap.py.template:/bootstrap.py:ro
+      - ${APP_DATA_DIR}/data/config:/config

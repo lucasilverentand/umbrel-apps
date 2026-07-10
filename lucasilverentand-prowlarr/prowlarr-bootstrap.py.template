@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+import copy
+import json
+import os
+import sys
+import time
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+
+def required(name):
+    value = os.environ.get(name, "").strip()
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
+
+
+def request_json(base_url, path, api_key, method="GET", payload=None):
+    data = None if payload is None else json.dumps(payload).encode("utf-8")
+    headers = {"Accept": "application/json", "X-Api-Key": api_key}
+    if data is not None:
+        headers["Content-Type"] = "application/json"
+    request = Request(
+        f"{base_url.rstrip('/')}/{path.lstrip('/')}",
+        data=data,
+        headers=headers,
+        method=method,
+    )
+    with urlopen(request, timeout=20) as response:
+        body = response.read()
+        return json.loads(body) if body else None
+
+
+def set_fields(provider, values):
+    fields = {
+        field.get("name", "").casefold(): field
+        for field in provider.get("fields", [])
+    }
+    for name, value in values.items():
+        field = fields.get(name.casefold())
+        if field is not None:
+            field["value"] = value
+
+
+def configure():
+    base_url = f"{required('PROWLARR_URL').rstrip('/')}/api/v1"
+    api_key = required("PROWLARR_API_KEY")
+    schemas = request_json(base_url, "indexerproxy/schema", api_key)
+    existing = request_json(base_url, "indexerproxy", api_key)
+    payload = next(
+        copy.deepcopy(schema)
+        for schema in schemas
+        if schema.get("implementation", "").casefold() == "flaresolverr"
+    )
+    set_fields(
+        payload,
+        {"host": required("FLARESOLVERR_URL"), "requestTimeout": 60},
+    )
+    payload.update({"name": "FlareSolverr", "tags": []})
+
+    match = next(
+        (
+            provider
+            for provider in existing
+            if provider.get("implementation", "").casefold() == "flaresolverr"
+            and provider.get("name") == "FlareSolverr"
+        ),
+        None,
+    )
+    if match:
+        payload["id"] = match["id"]
+        request_json(base_url, f"indexerproxy/{match['id']}", api_key, "PUT", payload)
+    else:
+        payload.pop("id", None)
+        request_json(base_url, "indexerproxy", api_key, "POST", payload)
+
+
+for attempt in range(180):
+    try:
+        configure()
+        print("Configured Prowlarr FlareSolverr integration")
+        if os.environ.get("BOOTSTRAP_ONCE") == "true":
+            sys.exit(0)
+        while True:
+            time.sleep(86400)
+    except (HTTPError, URLError, OSError, RuntimeError, ValueError, StopIteration, json.JSONDecodeError) as error:
+        if attempt % 12 == 0:
+            print(f"Waiting for Prowlarr and FlareSolverr: {error}")
+        time.sleep(5)
+
+raise SystemExit("Timed out configuring Prowlarr")

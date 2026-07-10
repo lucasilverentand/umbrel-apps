@@ -18,3 +18,31 @@ services:
       RADARR_4K_URL: http://lucasilverentand-radarr-4k_server_1:7878
     volumes:
       - ${APP_DATA_DIR}/data/config:/app/config
+
+  configurator:
+    image: python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      - server
+    command:
+      - python3
+      - /bootstrap.py
+    environment:
+      DEVICE_DOMAIN_NAME: ${DEVICE_DOMAIN_NAME:-umbrel.local}
+      OVERSEERR_URL: http://lucasilverentand-overseerr_server_1:5055
+      SONARR_HOST: lucasilverentand-sonarr_server_1
+      SONARR_PORT: "8989"
+      SONARR_API_KEY: ${LUCASILVERENTAND_SONARR_API_KEY:-}
+      SONARR_4K_HOST: lucasilverentand-sonarr-4k_server_1
+      SONARR_4K_PORT: "8989"
+      SONARR_4K_API_KEY: ${LUCASILVERENTAND_SONARR_4K_API_KEY:-}
+      RADARR_HOST: lucasilverentand-radarr_server_1
+      RADARR_PORT: "7878"
+      RADARR_API_KEY: ${LUCASILVERENTAND_RADARR_API_KEY:-}
+      RADARR_4K_HOST: lucasilverentand-radarr-4k_server_1
+      RADARR_4K_PORT: "7878"
+      RADARR_4K_API_KEY: ${LUCASILVERENTAND_RADARR_4K_API_KEY:-}
+    volumes:
+      - ./overseerr-bootstrap.py.template:/bootstrap.py:ro
+      - ${APP_DATA_DIR}/data/config:/config:ro

@@ -2,16 +2,18 @@ manifestVersion: 1
 id: lucasilverentand-profilarr
 category: Media
 name: Profilarr
-version: "2.0.9-umbrel.1"
+version: "2.0.9-umbrel.2"
 tagline: Quality profile sync for HD and 4K Arr instances
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-profilarr/icon.svg
 description: >-
   Profilarr keeps quality profiles and custom formats consistent across Sonarr,
-  Sonarr 4K, Radarr, and Radarr 4K. Use it to keep HD profiles on standard
-  instances and 2160p-only profiles on 4K instances.
+  Sonarr 4K, Radarr, and Radarr 4K. Installation registers all four Arr
+  connections automatically so profile and custom-format ownership can remain
+  centralized in Profilarr.
 releaseNotes: >-
-  Uses Umbrel's account login instead of asking for another Profilarr admin
-  account, while retaining the v2 parser and persistent profile database.
+  Automatically registers the HD and 4K Sonarr and Radarr connections while
+  retaining Umbrel account authentication and the persistent Profilarr v2
+  database.
 developer: Profilarr
 website: https://github.com/Dictionarry-Hub/profilarr
 dependencies:

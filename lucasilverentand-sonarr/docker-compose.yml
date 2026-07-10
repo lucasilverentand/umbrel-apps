@@ -49,12 +49,16 @@ services:
 
         set_xml_value AuthenticationMethod External
         set_xml_value AuthenticationRequired DisabledForLocalAddresses
-        echo "Applied Sonarr Umbrel authentication settings"
+        set_xml_value ApiKey "$$SERVICE_API_KEY"
+        mkdir -p "$$SONARR_ROOT_FOLDER"
+        chown "$$PUID:$$PGID" "$$SONARR_ROOT_FOLDER"
+        echo "Applied Sonarr Umbrel authentication and integration credentials"
         exec /init
     environment:
       PUID: "1000"
       PGID: "1000"
       TZ: ${TZ:-Etc/UTC}
+      SERVICE_API_KEY: ${LUCASILVERENTAND_SONARR_API_KEY:-}
       SONARR_CATEGORY: tv
       SONARR_ROOT_FOLDER: /data/series
       PROWLARR_URL: http://lucasilverentand-prowlarr_server_1:9696
@@ -63,3 +67,27 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
       - ${UMBREL_ROOT}/data/storage/downloads:/data
+
+  configurator:
+    image: python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      - server
+    command:
+      - python3
+      - /bootstrap.py
+    environment:
+      SERVICE_URL: ${LUCASILVERENTAND_SONARR_URL:-http://lucasilverentand-sonarr_server_1:8989}
+      SERVICE_API_KEY: ${LUCASILVERENTAND_SONARR_API_KEY:-}
+      ROOT_FOLDER: /data/series
+      DOWNLOAD_CATEGORY: tv
+      QBITTORRENT_URL: http://lucasilverentand-qbittorrent_server_1:8080
+      SABNZBD_URL: ${LUCASILVERENTAND_SABNZBD_URL:-http://lucasilverentand-sabnzbd_server_1:8080}
+      SABNZBD_API_KEY: ${LUCASILVERENTAND_SABNZBD_API_KEY:-}
+      PROWLARR_URL: ${LUCASILVERENTAND_PROWLARR_URL:-http://lucasilverentand-prowlarr_server_1:9696}
+      PROWLARR_API_KEY: ${LUCASILVERENTAND_PROWLARR_API_KEY:-}
+      PROWLARR_APPLICATION_NAME: Sonarr
+      PROWLARR_APPLICATION_IMPLEMENTATION: Sonarr
+    volumes:
+      - ./servarr-bootstrap.py.template:/bootstrap.py:ro

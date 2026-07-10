@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import sqlite3
+import sys
+import time
+
+
+def required(name):
+    value = os.environ.get(name, "").strip()
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
+
+
+def instance(prefix, name, kind, tags):
+    return {
+        "name": name,
+        "type": kind,
+        "url": required(f"{prefix}_URL"),
+        "external_url": required(f"{prefix}_EXTERNAL_URL"),
+        "api_key": required(f"{prefix}_API_KEY"),
+        "tags": json.dumps(tags),
+    }
+
+
+def configure():
+    instances = [
+        instance("SONARR", "Sonarr", "sonarr", ["hd"]),
+        instance("SONARR_4K", "Sonarr 4K", "sonarr", ["4k"]),
+        instance("RADARR", "Radarr", "radarr", ["hd"]),
+        instance("RADARR_4K", "Radarr 4K", "radarr", ["4k"]),
+    ]
+    database_path = os.environ.get("PROFILARR_DB_PATH", "/config/data/profilarr.db")
+    connection = sqlite3.connect(database_path, timeout=30)
+    connection.execute("PRAGMA busy_timeout = 30000")
+    table = connection.execute(
+        "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'arr_instances'"
+    ).fetchone()
+    if not table:
+        raise RuntimeError("Profilarr database migrations are not complete yet")
+
+    for item in instances:
+        connection.execute(
+            """
+            INSERT INTO arr_instances
+                (name, type, url, external_url, api_key, tags, enabled)
+            VALUES
+                (:name, :type, :url, :external_url, :api_key, :tags, 1)
+            ON CONFLICT(name) DO UPDATE SET
+                type = excluded.type,
+                url = excluded.url,
+                external_url = excluded.external_url,
+                api_key = excluded.api_key,
+                tags = excluded.tags,
+                enabled = 1,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            item,
+        )
+    connection.commit()
+    connection.close()
+
+
+for attempt in range(180):
+    try:
+        configure()
+        print("Configured Profilarr HD and 4K Arr connections")
+        if os.environ.get("BOOTSTRAP_ONCE") == "true":
+            sys.exit(0)
+        while True:
+            time.sleep(86400)
+    except (OSError, RuntimeError, sqlite3.Error) as error:
+        if attempt % 12 == 0:
+            print(f"Waiting for Profilarr database: {error}")
+        time.sleep(5)
+
+raise SystemExit("Timed out configuring Profilarr")

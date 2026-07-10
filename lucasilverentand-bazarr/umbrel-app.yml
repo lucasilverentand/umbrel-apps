@@ -2,17 +2,21 @@ manifestVersion: 1
 id: lucasilverentand-bazarr
 category: Media
 name: Bazarr
-version: "latest"
+version: "1.6.0-umbrel.1"
 tagline: Subtitle manager for Sonarr and Radarr
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-bazarr/icon.svg
 description: >-
-  Bazarr manages subtitles for the standard and 4K Sonarr and Radarr instances.
-  Connect it to each Arr server after install and point it at the shared /data
-  media tree.
-releaseNotes: Initial Umbrel package for subtitle management across HD and 4K libraries.
+  Bazarr manages subtitles for the standard Sonarr and Radarr libraries.
+  Installation connects both HD services and routes subtitle-provider traffic
+  through Privado. Bazarr supports only one Sonarr and one Radarr instance, so
+  the separate 4K libraries require a second Bazarr package.
+releaseNotes: >-
+  Automatically connects the HD Sonarr and Radarr services and applies the
+  Privado SOCKS5 proxy. No Arr API keys or Bazarr login are hardcoded.
 developer: Bazarr
 website: https://www.bazarr.media
 dependencies:
+  - lucasilverentand-privado-vpn
   - lucasilverentand-sonarr
   - lucasilverentand-sonarr-4k
   - lucasilverentand-radarr

@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import re
+import sys
+import time
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+
+def required(name):
+    value = os.environ.get(name, "").strip()
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
+
+
+def overseerr_api_key():
+    path = os.environ.get("OVERSEERR_CONFIG_PATH", "/config/settings.json")
+    with open(path, encoding="utf-8") as settings_file:
+        return json.load(settings_file)["main"]["apiKey"]
+
+
+def request_json(path, api_key, method="GET", payload=None):
+    data = None if payload is None else json.dumps(payload).encode("utf-8")
+    headers = {"Accept": "application/json", "X-API-Key": api_key}
+    if data is not None:
+        headers["Content-Type"] = "application/json"
+    request = Request(
+        f"{required('OVERSEERR_URL').rstrip('/')}/api/v1/{path.lstrip('/')}",
+        data=data,
+        headers=headers,
+        method=method,
+    )
+    with urlopen(request, timeout=30) as response:
+        body = response.read()
+        return json.loads(body) if body else None
+
+
+def choose_profile(profiles, is_4k):
+    if not profiles:
+        raise RuntimeError("No quality profiles are available yet")
+    pattern = re.compile(r"(2160|4k|uhd)" if is_4k else r"(1080|hd)", re.IGNORECASE)
+    preferred = [profile for profile in profiles if pattern.search(profile.get("name", ""))]
+    if not is_4k:
+        preferred = [
+            profile
+            for profile in preferred
+            if not re.search(r"(2160|4k|uhd)", profile.get("name", ""), re.IGNORECASE)
+        ]
+    return (preferred or profiles)[0]
+
+
+def configure_instance(api_key, service):
+    test_payload = {
+        "hostname": service["host"],
+        "port": service["port"],
+        "apiKey": service["api_key"],
+        "baseUrl": "",
+        "useSsl": False,
+    }
+    discovered = request_json(
+        f"settings/{service['kind']}/test", api_key, "POST", test_payload
+    )
+    root = next(
+        (
+            folder
+            for folder in discovered.get("rootFolders", [])
+            if folder.get("path", "").rstrip("/") == service["root"].rstrip("/")
+        ),
+        None,
+    )
+    if not root:
+        raise RuntimeError(f"{service['name']} root folder is not available yet")
+    profile = choose_profile(discovered.get("profiles", []), service["is_4k"])
+    payload = {
+        **test_payload,
+        "name": service["name"],
+        "activeProfileId": profile["id"],
+        "activeProfileName": profile["name"],
+        "activeDirectory": root["path"],
+        "tags": [],
+        "is4k": service["is_4k"],
+        "isDefault": True,
+        "externalUrl": service["external_url"],
+        "syncEnabled": True,
+        "preventSearch": False,
+        "tagRequests": False,
+    }
+    if service["kind"] == "sonarr":
+        payload.update(
+            {
+                "seriesType": "standard",
+                "animeSeriesType": "anime",
+                "animeTags": [],
+                "enableSeasonFolders": True,
+            }
+        )
+        languages = discovered.get("languageProfiles", [])
+        if languages:
+            payload["activeLanguageProfileId"] = languages[0]["id"]
+    else:
+        payload["minimumAvailability"] = "released"
+
+    existing = request_json(f"settings/{service['kind']}", api_key)
+    match = next(
+        (
+            item
+            for item in existing
+            if item.get("name") == service["name"]
+            or (
+                item.get("hostname") == service["host"]
+                and bool(item.get("is4k")) == service["is_4k"]
+            )
+        ),
+        None,
+    )
+    if match:
+        request_json(
+            f"settings/{service['kind']}/{match['id']}", api_key, "PUT", payload
+        )
+    else:
+        request_json(f"settings/{service['kind']}", api_key, "POST", payload)
+
+
+def service(kind, suffix, name, port, root, is_4k):
+    domain = os.environ.get("DEVICE_DOMAIN_NAME", "umbrel.local").strip()
+    return {
+        "kind": kind,
+        "name": name,
+        "host": required(f"{suffix}_HOST"),
+        "port": int(required(f"{suffix}_PORT")),
+        "api_key": required(f"{suffix}_API_KEY"),
+        "root": root,
+        "is_4k": is_4k,
+        "external_url": f"http://{domain}:{port}",
+    }
+
+
+def configure():
+    api_key = overseerr_api_key()
+    services = [
+        service("sonarr", "SONARR", "Sonarr", 29985, "/data/series", False),
+        service("sonarr", "SONARR_4K", "Sonarr 4K", 29986, "/data/series-4k", True),
+        service("radarr", "RADARR", "Radarr", 29987, "/data/movies", False),
+        service("radarr", "RADARR_4K", "Radarr 4K", 29988, "/data/movies-4k", True),
+    ]
+    for item in services:
+        configure_instance(api_key, item)
+
+
+for attempt in range(17280):
+    try:
+        configure()
+        print("Configured Overseerr HD and 4K Arr servers")
+        if os.environ.get("BOOTSTRAP_ONCE") == "true":
+            sys.exit(0)
+        while True:
+            time.sleep(86400)
+    except (HTTPError, URLError, OSError, KeyError, RuntimeError, ValueError, json.JSONDecodeError) as error:
+        if attempt % 12 == 0:
+            print(f"Waiting for Overseerr Plex login and Arr services: {error}")
+        time.sleep(5)
+
+raise SystemExit("Timed out configuring Overseerr")

@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-sabnzbd
 category: Media
 name: SABnzbd
-version: "5.0.4-umbrel.2"
+version: "5.0.4-umbrel.3"
 tagline: Usenet download client for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-sabnzbd/icon.svg
 description: >-
@@ -11,9 +11,9 @@ description: >-
   the movies, movies-4k, tv, tv-4k, and music categories. You only add your
   Usenet provider details.
 releaseNotes: >-
-  Automatically configures Privado, Arr categories, shared paths, and internal
-  service access. Umbrel's account login protects the UI without a hardcoded
-  SABnzbd password.
+  Adds a persisted random internal API key so Sonarr, Radarr, and Lidarr can
+  register SABnzbd automatically. Provider credentials remain user supplied,
+  and Umbrel's account login still protects the browser UI.
 developer: SABnzbd
 website: https://sabnzbd.org
 dependencies:

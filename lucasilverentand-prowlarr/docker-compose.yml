@@ -52,6 +52,7 @@ services:
 
         set_xml_value AuthenticationMethod External
         set_xml_value AuthenticationRequired DisabledForLocalAddresses
+        set_xml_value ApiKey "$$PROWLARR_API_KEY"
         set_xml_value ProxyEnabled True
         set_xml_value ProxyType Socks5
         set_xml_value ProxyHostname "$$PRIVADO_VPN_SOCKS_HOST"
@@ -65,8 +66,25 @@ services:
       PUID: "1000"
       PGID: "1000"
       TZ: ${TZ:-Etc/UTC}
+      PROWLARR_API_KEY: ${LUCASILVERENTAND_PROWLARR_API_KEY:-}
       PRIVADO_VPN_SOCKS_HOST: ${PRIVADO_VPN_SOCKS_HOST:-lucasilverentand-privado-vpn_server_1}
       PRIVADO_VPN_SOCKS_PORT: ${PRIVADO_VPN_SOCKS_PORT:-1080}
       FLARESOLVERR_URL: http://lucasilverentand-flaresolverr_server_1:8191
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
+
+  configurator:
+    image: python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      - server
+    command:
+      - python3
+      - /bootstrap.py
+    environment:
+      PROWLARR_URL: ${LUCASILVERENTAND_PROWLARR_URL:-http://lucasilverentand-prowlarr_server_1:9696}
+      PROWLARR_API_KEY: ${LUCASILVERENTAND_PROWLARR_API_KEY:-}
+      FLARESOLVERR_URL: http://lucasilverentand-flaresolverr_server_1:8191
+    volumes:
+      - ./prowlarr-bootstrap.py.template:/bootstrap.py:ro
