@@ -51,6 +51,8 @@ services:
         set_preference 'WebUI\HostHeaderValidation' 'false'
         set_preference 'WebUI\ServerDomains' '*'
         set_preference 'WebUI\SecureCookie' 'false'
+        set_preference 'WebUI\AuthSubnetWhitelistEnabled' 'true'
+        set_preference 'WebUI\AuthSubnetWhitelist' '0.0.0.0/0'
         set_preference 'Downloads\SavePath' '/data/complete'
         set_preference 'Downloads\TempPath' '/data/incomplete'
         set_preference 'Downloads\TempPathEnabled' 'true'
