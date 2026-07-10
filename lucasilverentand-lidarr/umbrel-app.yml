@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-lidarr
 category: Media
 name: Lidarr
-version: "3.1.0.4875-umbrel.3"
+version: "3.1.0.4875-umbrel.4"
 tagline: Music manager for the Arr stack
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-lidarr/icon.svg
 description: >-
@@ -11,9 +11,8 @@ description: >-
   both download clients with the music category, and registers Lidarr in
   Prowlarr.
 releaseNotes: >-
-  Adds idempotent install-time configuration for the root folder, qBittorrent,
-  SABnzbd, and full Prowlarr indexer synchronization using persisted random
-  internal API credentials.
+  Mounts Umbrel's network storage folder at /network so music libraries on a
+  host-mounted network share can be managed alongside local downloads.
 developer: Lidarr
 website: https://lidarr.audio
 dependencies:
