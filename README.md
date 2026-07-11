@@ -2,7 +2,7 @@
 
 This repository is a custom Umbrel app store. umbrelOS consumes app packages from non-hidden top-level directories in the repository.
 
-The root `umbrel-app-store.yml` identifies the community store. App package ids must start with that store id, for example `lucasilverentand-hello-world`.
+The root `umbrel-app-store.yml` identifies the community store. App package ids must start with that store id, for example `lucasilverentand-my-app`.
 
 ## Add An App
 
