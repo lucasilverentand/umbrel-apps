@@ -2,23 +2,21 @@ manifestVersion: 1
 id: lucasilverentand-crafty
 category: Gaming
 name: Crafty Controller
-version: "4.10.7-umbrel.3"
+version: "4.10.7-umbrel.4"
 tagline: Manage Minecraft and other game servers from your browser
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-crafty/icon.svg
 description: >-
   Crafty Controller is a self-hosted game server control panel for creating,
   importing, monitoring, backing up, and administering Minecraft Java and
-  Bedrock servers from your browser. Crafty generates an administrator password
-  on first launch; sign in as admin with the password stored in
-  data/config/default-creds.txt inside this app's Umbrel data directory. Game
-  clients connect directly to the Umbrel device on the ports configured for
-  each server. This package reserves TCP ports 25500-25600, UDP port 19132, and
-  TCP port 8123 for Minecraft servers and maps.
+  Bedrock servers from your browser. Sign in as admin with the password shown
+  by Umbrel when you open the app. Game clients connect directly to the Umbrel
+  device on the ports configured for each server. This package reserves TCP
+  ports 25500-25600, UDP port 19132, and TCP port 8123 for Minecraft servers
+  and maps.
 releaseNotes: >-
-  Fixes the reverse-proxy configuration mount for umbrelOS and removes the
-  optional Hytale UDP port range that could collide with other services.
-  Minecraft Java, Bedrock, and map ports remain available directly on the
-  Umbrel device.
+  Adds Umbrel-managed admin credentials. Umbrel now shows the username and its
+  generated deterministic password before opening Crafty, and fresh installs
+  configure Crafty's admin account with that password automatically.
 developer: Arcadia Technology
 website: https://craftycontrol.com
 dependencies: []
@@ -27,7 +25,8 @@ support: https://gitlab.com/crafty-controller/crafty-4/-/issues
 port: 29979
 gallery: []
 path: ""
-deterministicPassword: false
+defaultUsername: admin
+deterministicPassword: true
 torOnly: false
 submitter: Luca Silverentand
 submission: https://github.com/lucasilverentand/umbrel-apps
