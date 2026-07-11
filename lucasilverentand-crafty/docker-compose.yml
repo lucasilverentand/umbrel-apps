@@ -10,7 +10,7 @@ services:
     depends_on:
       - server
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${APP_DATA_DIR}/nginx.conf:/etc/nginx/nginx.conf:ro
 
   server:
     image: registry.gitlab.com/crafty-controller/crafty-4:4.10.7@sha256:67c2cbab1c88b75efb41b2970b1faca1a736b3532f6d1a806a7fe3f81664a199
