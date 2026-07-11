@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lucasilverentand-crafty
 category: Gaming
 name: Crafty Controller
-version: "4.10.7-umbrel.1"
+version: "4.10.7-umbrel.2"
 tagline: Manage Minecraft and other game servers from your browser
 icon: https://raw.githubusercontent.com/lucasilverentand/umbrel-apps/main/lucasilverentand-crafty/icon.svg
 description: >-
@@ -12,14 +12,12 @@ description: >-
   on first launch; sign in as admin with the password stored in
   data/config/default-creds.txt inside this app's Umbrel data directory. Game
   clients connect directly to the Umbrel device on the ports configured for
-  each server. This package reserves TCP ports 25500-25600, UDP port 19132, UDP
-  ports 5520-5550, and TCP port 8123 for supported game servers and maps.
+  each server. This package reserves TCP ports 25500-25600, UDP port 19132, and
+  TCP port 8123 for Minecraft servers and maps.
 releaseNotes: >-
-  Initial Umbrel package for Crafty Controller 4.10.7. Includes persistent
-  storage for configuration, servers, backups, logs, and imports; direct Java,
-  Bedrock, Hytale, and map ports; and seamless browser access through Umbrel's
-  app proxy. Upstream 4.10.7 fixes Java, Bedrock, modded-server, and Hytale
-  creation or update failures and a high-CPU terminal issue.
+  Removes the optional Hytale UDP port range that could collide with ports used
+  by other services and prevent Crafty from installing. Minecraft Java,
+  Bedrock, and map ports remain available directly on the Umbrel device.
 developer: Arcadia Technology
 website: https://craftycontrol.com
 dependencies: []
