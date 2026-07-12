@@ -1,0 +1,30 @@
+manifestVersion: 1
+id: lucasilverentand-scrypted
+category: automation
+name: Scrypted
+version: "0.143.0"
+tagline: Bring cameras into HomeKit, Google Home, Alexa, and a local NVR
+icon: https://www.scrypted.app/img/icons/apple-icon-180.png
+description: >-
+  Scrypted is a high-performance home video integration platform for connecting
+  cameras to HomeKit, Google Home, Alexa, and Scrypted NVR. This package uses
+  host networking, as recommended by Scrypted, so camera streams and local
+  discovery protocols can work across your LAN. Configuration is stored in the
+  app's persistent Umbrel data directory. Scrypted NVR requires a paid license;
+  camera integrations and supported smart-home bridges can be used without it.
+releaseNotes: >-
+  Initial Umbrel package for Scrypted 0.143.0. Includes persistent configuration,
+  host networking for camera and HomeKit discovery, and browser access through
+  Umbrel's app proxy.
+developer: Koushik Dutta
+website: https://www.scrypted.app/
+dependencies: []
+repo: https://github.com/koush/scrypted
+support: https://github.com/koush/scrypted/issues
+port: 29978
+gallery: []
+path: ""
+deterministicPassword: false
+torOnly: false
+submitter: Luca Silverentand
+submission: https://github.com/lucasilverentand/umbrel-apps
